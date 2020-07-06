@@ -1,15 +1,6 @@
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/trab_final');
 
-class Produto {
-    constructor(codigo,descricao,valor_unit,desconto){
-        this.codigo = codigo;
-        this.descricao = descricao,
-        this.valor_unit = valor_unit,
-        this.desconto = desconto
-    }
-}
-
 var SecaoSchema = new mongoose.Schema({
     nome: String,
     codigo_produtos: Array

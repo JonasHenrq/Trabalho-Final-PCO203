@@ -110,11 +110,11 @@ router.post('/pedido', (req, res) => {
 
     pedido.save(function(err){
         if (err) {
-            console.log("Error! " + err.message);
+            console.error("Error! " + err.message);
             return res.json(err);
         }
         else {
-            console.log("Post saved");
+            console.info("Post saved");
             return res.json(pedido._id);
         }
     });

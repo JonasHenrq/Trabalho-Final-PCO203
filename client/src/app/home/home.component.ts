@@ -38,7 +38,6 @@ export class HomeComponent implements OnInit {
 
     this.http.get<Secao[]>('http://localhost:3000/menu', httpOptions).subscribe(data => {
         this.menu = data;
-        console.log(this.menu);
     });
 
     this.pedido.valor_total=0;
@@ -127,14 +126,12 @@ export class HomeComponent implements OnInit {
   }
 
   remover_item_pedido(item){
-    console.log(item);
     const index = this.pedido.itemPedidos.indexOf(item);
     this.pedido.valor_total -= item.produto.preco * item.quantidade;
     this.pedido.itemPedidos.splice(index,1);
   }
 
   editar_item_pedido(item){
-    console.log(item);
     this.produto_edicao_indice = this.pedido.itemPedidos.indexOf(item);
     this.produto_edicao_qtd_anterior = item.quantidade;
     this.modo_apresentacao = "editar_quantidade";

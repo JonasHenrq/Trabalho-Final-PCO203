@@ -91,7 +91,6 @@ export class AdminComponent implements OnInit {
     };
 
     this.http.post<string>('http://localhost:3000/informar-pedido-entregue', pedido, httpOptions).subscribe(data => {
-      console.log(data);
       this.http.get<Pedido[]>('http://localhost:3000/pedidos-nao-entregue', httpOptions).subscribe(data => {
         this.pedidos_nao_entregues = data;
       });
