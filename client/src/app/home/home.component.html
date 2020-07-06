@@ -1,0 +1,307 @@
+<div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <div class="text-center">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/EFEI_logo.png" width="100em">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <div class="text-center">
+          <h3>RESTAURANTE PCO203 - UNIFEI</h3>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <div class="text-right">
+          <a href="/admin">
+            <button type="button" style="margin-bottom: 1vh;" class="btn btn-dark">Gestão do Restaurante</button>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf='modo_apresentacao == "menu"'>
+      <div class="row">
+        <div class="col-sm">
+          <div *ngFor="let item of this.menu">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page"><b>{{item.nome}}</b></li>
+              </ol>
+            </nav>
+            <ul class="list-unstyled">
+              <a *ngFor="let produto of item.produtos" (click)="escolha_produto(produto)" href="#">
+                <li class="media" style="margin-top: 1em;">
+                  <img class="mr-3" style="max-width: 10vw; max-height: 15vh;" src="{{produto.imagem}}"
+                    alt="Generic placeholder image">
+                  <div class="media-body">
+                    <h4 class="mt-0 mb-1">{{produto.nome}}</h4>
+                    <p *ngIf='produto.descricao != ""'>{{produto.descricao}}</p>
+                    <p><b>
+                        {{produto.preco | currency: 'R$'}}
+                      </b></p>
+                  </div>
+                </li>
+              </a>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="this.pedido.itemPedidos.length > 0" class="row">
+        <div class="col-sm">
+        </div>
+        <div class="col-sm">
+          <a href="#" (click)="visualizar_pedido()">
+            <div class="text-center footer" style="background-color: blue;">
+              <div style=" margin-top: 1em;">
+                <p style="color: white;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24" fill="white" height="5vh">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+                  </svg>{{this.pedido.itemPedidos.length}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  Meu Pedido &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <b>{{this.pedido.valor_total | currency: 'R$'}}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-sm">
+        </div>
+      </div>
+    </div>
+    <div *ngIf='modo_apresentacao == "escolha_produto"'>
+      <a href="#" (click)="cancelar()"> <h5><b>< Voltar </b></h5></a>
+      <div class="row">
+        <div class="col-sm">
+          <div class="text-center">
+            <img src="{{this.produto.imagem}}" style="max-width: 30vw; max-height: 30vh;">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div class="text-center">
+            <h3>{{this.produto.nome}}</h3>
+          </div>
+        </div>
+      </div>
+      <div *ngIf='this.produto.descricao != ""' class="row">
+        <div class="col-sm">
+          <div class="text-center">
+            {{this.produto.descricao}}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div class="text-center">
+            <h5>{{this.produto.preco | currency: 'R$'}}</h5>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="this.produto.temOpcoes == true">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page"><b>Arroz e Feijão</b></li>
+          </ol>
+        </nav>
+        <div class="row">
+          <div clas="col-sm">
+            <div clas="col-sm">
+              <div *ngFor="let item of itens_secao_arroz">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="checkbox" (change)="secao_arroz(item)"> {{item}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page"><b>Carnes</b></li>
+          </ol>
+        </nav>
+        <div class="row">
+          <div clas="col-sm">
+            <div clas="col-sm">
+              <div *ngFor="let item of itens_secao_carnes">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="acompanhamento" (change)="secao_carnes(item)"> {{item}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page"><b>Acompanhamentos</b></li>
+          </ol>
+        </nav>
+        <div class="row">
+          <div clas="col-sm">
+            <div clas="col-sm">
+              <div *ngFor="let item of itens_secao_acompanhamentos">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="checkbox" (change)="secao_acompanhamento(item)"> {{item}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active" aria-current="page"><b>Quantidade</b></li>
+        </ol>
+      </nav>
+      <div class="row">
+        <div class="col-sm">
+          <div>
+            Quantidade: 
+            <input type="number" min="1" class="form-control" name="quantidade" [(ngModel)]="produto_quantidade">
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-sm">
+          <div class="text-center">
+            <button type="button" class="btn btn-warning" (click)="cancelar()">Voltar</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-success" [disabled]="produto_quantidade < 1 ||
+             (this.produto.temOpcoes == true && this.produto.opcoes[0].valores.length == 0) || (this.produto.temOpcoes == true && this.produto.opcoes[1].valores.length == 0) || (this.produto.temOpcoes == true && this.produto.opcoes[2].valores.length == 0)" (click)="confirma_pedido()">Confirmar Escolha</button>
+             <p *ngIf="(this.produto.temOpcoes == true && this.produto.opcoes[0].valores.length == 0) || (this.produto.temOpcoes == true && this.produto.opcoes[1].valores.length == 0) || (this.produto.temOpcoes == true && this.produto.opcoes[2].valores.length == 0)" style="color: brown;"><b>Selecione pelo menos um item de cada seção</b></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf='modo_apresentacao == "carrinho"'>
+      <div class="row">
+        <div class="col-sm">
+          <div class="text-center">
+            <h4>Carrinho</h4>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1">
+          <div class="text-center">
+          </div>
+        </div>
+        <div class="col-sm-10">
+          <a href="#" (click)="cancelar()"> <h5><b>< Voltar </b></h5></a>
+          <br>
+          <h5>Itens</h5>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Quantidade</th>
+                <th scope="col">Item</th>
+                <th scope="col">Preço</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of this.pedido.itemPedidos">
+                <td>{{ item.quantidade }}</td>
+                <td>{{ item.produto.nome }}
+                  <div *ngIf="item.produto.temOpcoes == true">
+                    <div *ngFor="let opcoes of item.produto.opcoes">
+                      <li *ngFor="let item of opcoes.valores">
+                        {{item}}
+                      </li>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ item.produto.preco * item.quantidade | currency: 'R$' }}</td>
+                <td class="text-center">
+                  <button type="button" class="btn btn-warning btn-sm" (click)="editar_item_pedido(item)">Editar Quantidade</button>
+                  &nbsp;&nbsp;
+                  <button type="button" class="btn btn-danger btn-sm" (click)="remover_item_pedido(item)">Remover</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="text-right">
+            <b>Total: {{this.pedido.valor_total | currency: 'R$'}}</b>
+          </div>
+          <br>
+          Nome*:
+          <input type="text" class="form-control" name="nome" required [(ngModel)]="this.pedido.nome">
+          <br>
+          Endereço Entrega*:
+          <input type="text" class="form-control" name="endereco_entrega" required [(ngModel)]="this.pedido.endereco_entrega">
+          <br>
+          <div class="text-center">
+            <button type="button" class="btn btn-success" (click)="fechar_pedido()" [disabled]="!(this.pedido.nome && this.pedido.endereco_entrega) || this.pedido.itemPedidos.length == 0">Fechar Pedido</button>
+          </div>
+        </div>
+        <div class="col-sm-1">
+        </div>
+      </div>
+    </div>
+    <div *ngIf='modo_apresentacao == "editar_quantidade"'>
+      <div class="row">
+        <div class="col-sm">
+          <div class="text-center">
+            <img src="{{this.pedido.itemPedidos[produto_edicao_indice].produto.imagem}}" style="max-width: 40vw; max-height: 40vw;">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div class="text-center">
+            <h3>{{this.pedido.itemPedidos[produto_edicao_indice].produto.nome}}</h3>
+          </div>
+        </div>
+      </div>
+      <div *ngIf='this.pedido.itemPedidos[produto_edicao_indice].produto.descricao != ""' class="row">
+        <div class="col-sm">
+          <div class="text-center">
+            {{this.pedido.itemPedidos[produto_edicao_indice].produto.descricao}}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div class="text-center">
+            <h5>{{this.pedido.itemPedidos[produto_edicao_indice].produto.preco | currency: 'R$'}}</h5>
+          </div>
+        </div>
+      </div>
+      <br>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active" aria-current="page"><b>Quantidade</b></li>
+        </ol>
+      </nav>
+      <div class="row">
+        <div class="col-sm">
+          <div>
+            Quantidade: 
+            <input type="number" class="form-control" min="1" name="quantidade" [(ngModel)]="this.pedido.itemPedidos[produto_edicao_indice].quantidade">
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-sm">
+          <div class="text-center">
+            <button type="button" class="btn btn-warning" (click)="cancelar()">Cancelar</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-success" (click)="salvar_edicao_item_pedido()">Editar Quantidade</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf='modo_apresentacao == "sucesso_pedido"'>
+      <div class="row">
+        <div class="col-sm">
+          <div class="text-center">
+            <img src="https://listimg.pinclipart.com/picdir/s/412-4121138_how-do-i-get-security-deposit-back-gif.png" style="max-height: 40vw;">
+            <h3>Pedido {{idPedido}} registrado com sucesso! Aguarde o processo de entrega!</h3>
+            <br>
+            <button type="button" class="btn btn-success" (click)="concluir_pedido()">Concluir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>

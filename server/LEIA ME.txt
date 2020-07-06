@@ -1,0 +1,10 @@
+Utilizar o mongod com --dbpath na pasta 'data' para ter acesso ao produtos!
+Lembre-se de finalizar outro servidor mongo que estiver rodando antes!
+
+Faça o teste, execute mongo antes rodar o mongod. Caso o comando funcione, você terá que desligar este servidor.
+
+Para isso execute:
+use admin
+db.shutdownServer()
+
+Depois é só rodar o comando do mongod normalmente. 

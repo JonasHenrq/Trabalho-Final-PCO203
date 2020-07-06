@@ -1,0 +1,208 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <div class="text-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/EFEI_logo.png" width="100em">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="text-center">
+                <h3>GESTÃO RESTAURANTE PCO203</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+          <div class="text-right">
+            <a href="/">
+              <button type="button" style="margin-bottom: 1vh;" class="btn btn-dark">Voltar para Menu</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    <div class="row">
+        <div class="col-sm">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class='nav-link {{modo_visualizacao == "gerenciar_entrega" ? "active" : ""}}'
+                        (click)='alterar_visializacao("gerenciar_entrega")' href="/admin#">Gerenciar Entregas</a>
+                </li>
+                <li class="nav-item">
+                    <a class='nav-link {{modo_visualizacao == "gerenciar_prato" ? "active" : ""}}'
+                        (click)='alterar_visializacao("gerenciar_prato")' href="/admin#">Gerenciar Pratos do Dia</a>
+                </li>
+                <li class="nav-item">
+                    <a class='nav-link {{modo_visualizacao == "gerenciar_caixa" ? "active" : ""}}'
+                        (click)='alterar_visializacao("gerenciar_caixa")' href="/admin#">Status do Caixa</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row" *ngIf='modo_visualizacao == "gerenciar_entrega"'>
+        <div class="col-sm">
+            <div class="text-center">
+                <br>
+                <h3>Pedidos em Processo de Entrega</h3>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Horário do Pedido</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Endereço</th>
+                            <th scope="col">Valor Pedido</th>
+                            <th scope="col">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let pedido of this.pedidos_nao_entregues">
+                            <td>{{pedido.data | date:'HH:mm:ss'}}</td>
+                            <td>{{pedido.nome}}</td>
+                            <td>{{pedido.endereco_entrega}}</td>
+                            <td>{{pedido.valor | currency: 'R$'}}</td>
+                            <td><button type="button" class="btn btn-info"
+                                    (click)="informar_entrega_pedido(pedido)">Informar entrega</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-center" *ngIf="this.pedidos_nao_entregues && this.pedidos_nao_entregues.length == 0">
+                    <p>Nenhum pedido em processo de entrega!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" *ngIf='modo_visualizacao == "gerenciar_prato"'>
+        <div class="col-sm">
+            <br>
+            <div *ngFor="let produto of this.produtos_com_opcoes">
+                <div class="text-center">
+                    <h5>PRATO: {{produto.nome}}</h5>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item active" aria-current="page"><b>Arroz e Feijão</b></li>
+                        </ol>
+                    </nav>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Item</th>
+                                <th scope="col">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of produto.opcoes[0].valores">
+                                <td>{{item}}</td>
+                                <td><button type="button" class="btn btn-warning"
+                                        (click)="remover_item(item, 0, produto)">Remover Item</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    Adicionar novo item: <input class="form-control" type="text" name="graos"
+                        [(ngModel)]="this.novos_itens[0]">
+                    <button class="btn btn-secondary" (click)="adicionar_item(0,produto)">Adicionar</button>
+                    <br>
+                    <nav style="margin-top: 2vh;" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item active" aria-current="page"><b>Carnes</b></li>
+                        </ol>
+                    </nav>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Item</th>
+                                <th scope="col">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of produto.opcoes[1].valores">
+                                <td>{{item}}</td>
+                                <td><button type="button" class="btn btn-warning"
+                                        (click)="remover_item(item, 1, produto)">Remover Item</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    Adicionar novo item: <input class="form-control" type="text" name="carnes"
+                        [(ngModel)]="this.novos_itens[1]">
+                    <button class="btn btn-secondary" (click)="adicionar_item(1,produto)">Adicionar</button>
+                    <br>
+                    <nav style="margin-top: 2vh;" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item active" aria-current="page"><b>Acompanhamentos</b></li>
+                        </ol>
+                    </nav>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Item</th>
+                                <th scope="col">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of produto.opcoes[2].valores">
+                                <td>{{item}}</td>
+                                <td><button type="button" class="btn btn-warning"
+                                        (click)="remover_item(item, 2, produto)">Remover Item</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    Adicionar novo item: <input class="form-control" type="text" name="acompanhamento"
+                        [(ngModel)]="this.novos_itens[2]">
+                    <button class="btn btn-secondary" (click)="adicionar_item(2,produto)">Adicionar</button>
+                    <button style="margin-top: 2vh;" type="button" class="btn btn-success btn-block"
+                        (click)="salvar_edicao(produto)">Salvar Alterações</button>
+                    <br><br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf='modo_visualizacao == "gerenciar_caixa"'>
+        <br>
+        <div class="row">
+            <div class="col-sm">
+                <div class="text-center">
+                    <h4>Estastísticas do Dia</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+            </div>
+            <div class="col-sm">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Número de Pedidos do Dia</td>
+                            <td>{{this.total_de_pedidos_do_dia.num_pedidos}}</td>
+                        </tr>
+                        <tr>
+                            <td>Número de Pedidos Entregue</td>
+                            <td>{{this.total_de_pedidos_do_dia.num_pedidos - this.total_de_perdas_do_dia.num_pedidos_nao_entregue}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Número de Pedidos Não Entregue / Perdas</td>
+                            <td>{{this.total_de_perdas_do_dia.num_pedidos_nao_entregue}}</td>
+                        </tr>
+                        <tr>
+                            <td>Valor Total dos Pedidos</td>
+                            <td>{{this.total_de_pedidos_do_dia.valor_total | currency: 'R$'}}</td>
+                        </tr>
+                        <tr>
+                            <td>Valor Total dos Pedidos Não Entregue / Perdas</td>
+                            <td>{{this.total_de_perdas_do_dia.valor_total_das_perdas | currency: 'R$'}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Saldo Final em Caixa</b></td>
+                            <td><b>{{this.total_de_pedidos_do_dia.valor_total - this.total_de_perdas_do_dia.valor_total_das_perdas | currency: 'R$'}}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+            </div>
+        </div>
+    </div>
+</div>
